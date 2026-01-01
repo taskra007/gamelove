@@ -177,4 +177,56 @@ body {
   from { transform: translateY(-100%); }
   to { transform: translateY(100%); }
 }
+/* ========== MOBILE RESPONSIVE FIX ========== */
+@media (max-width: 500px) {
+  /* Side chains smaller */
+  .side-chain {
+    width: 25vw;
+  }
+
+  /* Chain images smaller */
+  .chain img {
+    width: 20vw;
+    height: 20vw;
+  }
+
+  /* Levels smaller and repositioned */
+  .level {
+    width: 12vw;
+    height: 12vw;
+    font-size: 5vw;
+  }
+  .level:nth-child(even) {
+    left: 60vw !important;
+  }
+  .level:nth-child(odd) {
+    left: 10vw !important;
+  }
+
+  /* Levels container responsive */
+  #levels {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Game card responsive */
+  .card {
+    width: 90%;
+    max-width: 300px;
+    padding: 20px;
+  }
+
+  #options button {
+    font-size: 4vw;
+    padding: 10px;
+  }
+
+  /* Final button responsive */
+  #nextPageBtn {
+    font-size: 5vw;
+    padding: 12px 25px;
+  }
+}
+
+
 
