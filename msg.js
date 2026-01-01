@@ -3,12 +3,11 @@ const questions = [
   { q: "namba rendu parula yaru first pasuna", a: "loosu" },
   { q: "namba rendu parum nadathu pova first reson yaru", a: "madu" },
   { q: "namba rendu parula yaru first loosu", a: "loosu" },
-  { q: "10th laa naa sapudalana nee sapuduviya?", a: "no" },
-  { q: "namba rendu parula yaru v2ku bayapaduva", a: "loosu" },
-  { q: "namba rendu parula yaru marapa", a: "renduparum" },
-  { q: "proposal date correct ah sonnena?", a: "no" },
-  { q: "namba rendu parula sollratha kekamata", a: "loosu" },
-  { q: "yaru romba pavam", a: "madu" },
+  { q: "10th laa naa sapudalana nee sapuduviya? yes or no", a: "no" },
+  { q: "namba rendu parula yaru v2ku athigama bayapaduva", a: "loosu" },
+  { q: "namba rendu parula yaru athigama marapa", a: "renduparum" },
+  { q: "idhu varaikum naa proposal date correct ah solli irukana?", a: "no" },
+  { q: "namba rendu parula yaru sollratha kekamata", a: "loosu" },
   { q: "namba rendu parula yaru romba pavam", a: "madu" }
 ];
 
@@ -103,25 +102,36 @@ function moveHeart(callback) {
   }, 1300);
 }
 
-/* Check answer */
 function checkAnswer(ans) {
   if (ans === questions[level].a) {
     showKiss();
     game.style.display = "none";
 
+    // 🔥 LAST LEVEL CASE
+    if (level === questions.length - 1) {
+      level++;
+      renderLevels();
+
+      document.getElementById("map").style.display = "none";
+      finalPopup.style.display = "flex";
+      document.body.style.overflowY = "auto";
+
+      // 🔓 UNLOCK BUTTON
+      loveBtn.disabled = false;
+      loveBtn.classList.remove("locked");
+      loveBtn.classList.add("unlocked");
+      loveBtn.innerText = "❤️ Click for Love";
+
+      return;
+    }
+
+    // 🧡 NORMAL LEVELS
     moveHeart(() => {
       level++;
-      if (level < questions.length) {
-        renderLevels();
-        openGame();
-      } else {
-        // ✅ All levels finished: show popup
-        renderLevels();
-        document.getElementById("map").style.display = "none";
-        finalPopup.style.display = "flex";
-        document.body.style.overflowY = "auto"; // allow scrolling if needed
-      }
+      renderLevels();
+      openGame();
     });
+
   } else {
     feedback.innerText = "Try again my love 💕";
     document.querySelector(".card").classList.add("shake");
@@ -138,3 +148,4 @@ nextPageBtn.onclick = () => {
 
 /* Start */
 renderLevels();
+const loveBtn = document.getElementById("loveBtn");
