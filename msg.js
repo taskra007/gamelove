@@ -106,15 +106,19 @@ function checkAnswer(ans) {
 
     moveHeart(() => {
       level++;
-      if (level < questions.length) {
-        renderLevels();
-        openGame();
-      } else {
-        // FINISH
-        renderLevels();
-        document.getElementById("map").style.display = "none";
-        final.style.display = "flex";
-      }
+     if (level < questions.length) {
+    renderLevels();
+    openGame();
+} else {
+    // FINISH
+    renderLevels();
+    document.getElementById("map").style.display = "none";
+    final.style.display = "flex";
+
+    // ✅ Allow scrolling now
+    document.body.style.overflowY = "auto";
+}
+
     });
   } else {
     feedback.innerText = "Try again my love 💕";
@@ -132,3 +136,4 @@ nextPageBtn.onclick = () => {
 
 /* START */
 renderLevels();
+
