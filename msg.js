@@ -9,6 +9,7 @@ const questions = [
   { q: "proposal date correct ah sonnena?", a: "no" },
   { q: "namba rendu parula sollratha kekamata", a: "loosu" },
   { q: "yaru romba pavam", a: "madu" },
+  { q: "namba rendu parula yaru romba pavam", a: "madu" }
 ];
 
 let level = 0;
@@ -18,10 +19,13 @@ const game = document.getElementById("game");
 const questionEl = document.getElementById("question");
 const optionsEl = document.getElementById("options");
 const feedback = document.getElementById("feedback");
-const final = document.getElementById("final");
+const finalPopup = document.getElementById("finalPopup");
 const nextPageBtn = document.getElementById("nextPageBtn");
 
-/* RENDER LEVELS */
+/* Prevent scrolling initially */
+document.body.style.overflowY = "hidden";
+
+/* Render levels */
 function renderLevels() {
   levelsDiv.innerHTML = "";
   questions.forEach((_, i) => {
@@ -33,14 +37,15 @@ function renderLevels() {
 
     if (i === level) {
       d.style.cursor = "pointer";
-      d.onclick = () => openGame();
+      d.onclick = openGame;
+      d.addEventListener("touchstart", openGame);
     }
 
     levelsDiv.appendChild(d);
   });
 }
 
-/* OPEN GAME */
+/* Open game */
 function openGame() {
   game.style.display = "flex";
   questionEl.innerText = questions[level].q;
@@ -57,7 +62,7 @@ function openGame() {
     });
 }
 
-/* SHOW KISS */
+/* Show kiss */
 function showKiss() {
   for (let i = 0; i < 15; i++) {
     const k = document.createElement("div");
@@ -69,12 +74,12 @@ function showKiss() {
   }
 }
 
-/* HEART MOVE */
+/* Heart move */
 function moveHeart(callback) {
   const levelsElems = document.querySelectorAll(".level");
   const from = levelsElems[level];
   const to = levelsElems[level + 1];
-  if (!to) { if(callback) callback(); return; }
+  if (!to) return;
 
   const h = document.createElement("div");
   h.className = "moving-heart";
@@ -98,7 +103,7 @@ function moveHeart(callback) {
   }, 1300);
 }
 
-/* CHECK ANSWER */
+/* Check answer */
 function checkAnswer(ans) {
   if (ans === questions[level].a) {
     showKiss();
@@ -110,13 +115,11 @@ function checkAnswer(ans) {
         renderLevels();
         openGame();
       } else {
-        // FINISH
+        // ✅ All levels finished: show popup
         renderLevels();
         document.getElementById("map").style.display = "none";
-        final.style.display = "flex";
-
-        // Allow scrolling now
-        document.body.style.overflowY = "auto";
+        finalPopup.style.display = "flex";
+        document.body.style.overflowY = "auto"; // allow scrolling if needed
       }
     });
   } else {
@@ -128,10 +131,10 @@ function checkAnswer(ans) {
   }
 }
 
-/* NEXT PAGE BUTTON */
+/* Next page button */
 nextPageBtn.onclick = () => {
   window.location.href = "index2.html";
 };
 
-/* START */
+/* Start */
 renderLevels();
