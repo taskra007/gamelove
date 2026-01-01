@@ -33,7 +33,7 @@ function renderLevels() {
 
     if (i === level) {
       d.style.cursor = "pointer";
-      d.onclick = openGame;
+      d.onclick = () => openGame();
     }
 
     levelsDiv.appendChild(d);
@@ -74,7 +74,7 @@ function moveHeart(callback) {
   const levelsElems = document.querySelectorAll(".level");
   const from = levelsElems[level];
   const to = levelsElems[level + 1];
-  if (!to) return;
+  if (!to) { if(callback) callback(); return; }
 
   const h = document.createElement("div");
   h.className = "moving-heart";
@@ -106,19 +106,18 @@ function checkAnswer(ans) {
 
     moveHeart(() => {
       level++;
-     if (level < questions.length) {
-    renderLevels();
-    openGame();
-} else {
-    // FINISH
-    renderLevels();
-    document.getElementById("map").style.display = "none";
-    final.style.display = "flex";
+      if (level < questions.length) {
+        renderLevels();
+        openGame();
+      } else {
+        // FINISH
+        renderLevels();
+        document.getElementById("map").style.display = "none";
+        final.style.display = "flex";
 
-    // ✅ Allow scrolling now
-    document.body.style.overflowY = "auto";
-}
-
+        // Allow scrolling now
+        document.body.style.overflowY = "auto";
+      }
     });
   } else {
     feedback.innerText = "Try again my love 💕";
@@ -136,4 +135,3 @@ nextPageBtn.onclick = () => {
 
 /* START */
 renderLevels();
-
