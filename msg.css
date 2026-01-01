@@ -1,152 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-body {
-  background: linear-gradient(#ff5fa2, #ff9fcf);
-  color: white;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* MAP */
-#map {
-  text-align: center;
-  padding-top: 20px;
-}
-
-#levels {
-  position: relative;
-  width: 300px;
-  height: 900px;
-  margin: 30px auto;
-}
-
-/* LEVEL */
-.level {
-  position: absolute;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle, #fff, #ff2d7a);
-  box-shadow: 0 0 20px hotpink;
-}
-
-.locked {
-  background: #444;
-  box-shadow: none;
-}
-
-/* GAME */
-#game {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
-
-.card {
-  background: linear-gradient(#ff7eb3, #ff2d7a);
-  padding: 25px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 350px;
-  text-align: center;
-  box-shadow: 0 0 30px hotpink;
-}
-
-#options button {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 25px;
-  border: none;
-  font-weight: bold;
-  color: #ff2d7a;
-  cursor: pointer;
-}
-
-/* FINAL */
-#final {
-  display: none;
-  height: 100vh; /* full viewport height */
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  flex-direction: column;
-  overflow: hidden; /* prevent inner scroll */
-}
-
-
-/* NEXT PAGE BUTTON */
-#nextPageBtn {
-  margin-top: 30px;
-  padding: 15px 40px;
-  font-size: 20px;
-  border-radius: 30px;
-  border: none;
-  background: white;
-  color: #ff2d7a;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* KISS */
-.kiss {
-  position: fixed;
-  bottom: -40px;
-  font-size: 32px;
-  animation: fly 1.3s linear forwards;
-  z-index: 999;
-}
-
-@keyframes fly {
-  to { transform: translateY(-120vh); opacity: 0; }
-}
-
-/* HEART MOVE */
-.moving-heart {
-  position: fixed;
-  font-size: 36px;
-  z-index: 1000;
-  transition: all 1.3s ease-in-out;
-}
-
-/* SHAKE */
-.shake {
-  animation: shake 0.3s;
-}
-
-@keyframes shake {
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-}
-
-/* SIDE CHAINS */
-.side-chain {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 200px;
-  display: flex;
-  justify-content: center;
-  z-index: -1;
-}
-
-.side-chain.left { left: 0; }
-.side-chain.right { right: 0; }
-
+/* ================== CHAIN ANIMATION ================== */
 .chain {
   display: flex;
   flex-direction: column;
@@ -178,63 +30,116 @@ body {
   from { transform: translateY(-100%); }
   to { transform: translateY(100%); }
 }
+
+/* ================== LEVELS ================== */
+.level {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #fff;
+  text-align: center;
+  line-height: 50px;
+  font-size: 24px;
+  cursor: default;
+}
+
+/* ================== GAME POP-UP ================== */
+#game {
+  display: none;               /* hide initially */
+  position: fixed;             /* stay on screen */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6); /* dim background */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;               /* above everything */
+}
+
+.card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: none;
+}
+
+.card.shake {
+  animation: shake 0.3s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+}
+
+/* OPTIONS BUTTONS */
+#options button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* MOVING HEART */
+.moving-heart {
+  position: absolute;
+  font-size: 30px;
+  z-index: 1001;
+}
+
+/* KISS EFFECT */
+.kiss {
+  position: fixed;
+  font-size: 24px;
+  animation: kissFall 1.3s linear forwards;
+}
+
+@keyframes kissFall {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(100px); opacity: 0; }
+}
+
+/* ================== FINAL SECTION ================== */
+#final {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px;
+}
+
+#nextPageBtn {
+  margin-top: 20px;
+  padding: 15px 30px;
+  font-size: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 /* ========== MOBILE RESPONSIVE FIX ========== */
 @media (max-width: 500px) {
-  /* Side chains smaller */
-  .side-chain {
-    width: 25vw;
-  }
-
-  /* Chain images smaller */
-  .chain img {
-    width: 20vw;
-    height: 20vw;
-  }
-
-  /* Levels smaller and repositioned */
-  .level {
-    width: 12vw;
-    height: 12vw;
-    font-size: 5vw;
-  }
-  .level:nth-child(even) {
-    left: 60vw !important;
-  }
-  .level:nth-child(odd) {
-    left: 10vw !important;
-  }
-
-  /* Levels container responsive */
-  #levels {
-    width: 100%;
-    height: auto;
-  }
-
-  /* Game card responsive */
-  .card {
-    width: 90%;
-    max-width: 300px;
-    padding: 20px;
-  }
-
-  #options button {
-    font-size: 4vw;
-    padding: 10px;
-  }
-
-  /* Final button responsive */
-  #nextPageBtn {
-    font-size: 5vw;
-    padding: 12px 25px;
-  }
+  .side-chain { width: 25vw; }
+  .chain img { width: 20vw; height: 20vw; }
+  .level { width: 12vw; height: 12vw; font-size: 5vw; }
+  .level:nth-child(even) { left: 60vw !important; }
+  .level:nth-child(odd) { left: 10vw !important; }
+  #levels { width: 100%; height: auto; }
+  .card { width: 90%; max-width: 300px; padding: 20px; }
+  #options button { font-size: 4vw; padding: 10px; }
+  #nextPageBtn { font-size: 5vw; padding: 12px 25px; }
 }
-/* Prevent scrolling initially */
+
+/* Prevent horizontal scrolling initially */
 body {
   overflow-x: hidden;
-  overflow-y: hidden; /* Hide vertical scroll */
+  overflow-y: hidden;
 }
-
-
-
-
-
