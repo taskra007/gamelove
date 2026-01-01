@@ -78,14 +78,13 @@ body {
 
 /* FINAL */
 #final {
-  display: none;
+  display: none; /* hide it initially */
   height: 100vh;
   background: radial-gradient(circle, #ff7eb3, #1b0033);
   justify-content: center;
   align-items: center;
   text-align: center;
   flex-direction: column;
-  display: flex;
 }
 
 /* NEXT PAGE BUTTON */
@@ -178,3 +177,4 @@ body {
   from { transform: translateY(-100%); }
   to { transform: translateY(100%); }
 }
+
