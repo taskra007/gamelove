@@ -227,6 +227,12 @@ body {
     padding: 12px 25px;
   }
 }
+/* Prevent scrolling initially */
+body {
+  overflow-x: hidden;
+  overflow-y: hidden; /* Hide vertical scroll */
+}
+
 
 
 
