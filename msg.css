@@ -57,13 +57,26 @@ body {
 }
 
 .card {
-  background: linear-gradient(#ff7eb3, #ff2d7a);
-  padding: 25px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
   border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(255, 0, 100, 0.25);
   width: 90%;
-  max-width: 350px;
+  max-width: 360px;
   text-align: center;
-  box-shadow: 0 0 30px hotpink;
+  animation: cardEnter 0.5s ease;
+}
+
+@keyframes cardEnter {
+  from {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 #options button {
@@ -76,6 +89,15 @@ body {
   color: #ff2d7a;
   cursor: pointer;
 }
+#options button:active {
+  transform: scale(0.95);
+}
+
+#options button:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.6);
+}
+
 
 /* KISS & HEART animations */
 .kiss {
@@ -224,4 +246,68 @@ body {
   0% { transform: scale(1); }
   50% { transform: scale(1.08); }
   100% { transform: scale(1); }
+}
+.moving-heart {
+  position: fixed;
+  font-size: 28px;
+  z-index: 9999;
+  pointer-events: none;
+  transition: transform 1.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.sparkle {
+  position: fixed;
+  font-size: 14px;
+  pointer-events: none;
+  animation: sparkleFade 0.8s ease-out forwards;
+}
+
+@keyframes sparkleFade {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2) translateY(-10px);
+  }
+}
+.glitter {
+  position: fixed;
+  font-size: 18px;
+  pointer-events: none;
+  animation: glitterBoom 1s ease-out forwards;
+}
+
+@keyframes glitterBoom {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3) translate(var(--x), var(--y));
+  }
+}
+.level.pulse {
+  animation: heartbeat 1.2s infinite;
+}
+
+@keyframes heartbeat {
+  0%   { transform: scale(1); }
+  14%  { transform: scale(1.3); }
+  28%  { transform: scale(1); }
+  42%  { transform: scale(1.3); }
+  70%  { transform: scale(1); }
+}
+#map {
+  position: relative;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.moving-heart,
+.sparkle,
+.glitter {
+  pointer-events: none;
 }
