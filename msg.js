@@ -22,6 +22,7 @@ const feedback = document.getElementById("feedback");
 const finalPopup = document.getElementById("finalPopup");
 const nextPageBtn = document.getElementById("nextPageBtn");
 const loveBtn = document.getElementById("loveBtn");
+const levelText = document.getElementById("levelText");
 
 document.body.style.overflowY = "hidden";
 
@@ -215,3 +216,4 @@ nextPageBtn.onclick = () => {
 
 // ================== START ==================
 renderLevels();
+
