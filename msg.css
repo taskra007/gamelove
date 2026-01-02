@@ -311,3 +311,23 @@ body {
 .glitter {
   pointer-events: none;
 }
+.level-text {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ff4d88;
+  opacity: 0;
+  animation: levelPop 0.6s ease forwards;
+}
+
+@keyframes levelPop {
+  0% {
+    transform: translateY(10px) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
