@@ -70,6 +70,10 @@ function renderLevels() {
 // ================== OPEN GAME ==================
 function openGame() {
   game.style.display = "flex";
+  levelText.innerText = `Level ${level + 1}`;
+levelText.style.animation = "none";
+levelText.offsetHeight; // 🔥 reset animation
+levelText.style.animation = "levelPop 0.6s ease forwards";
   feedback.innerText = "";
   optionsEl.innerHTML = "";
 
@@ -216,4 +220,5 @@ nextPageBtn.onclick = () => {
 
 // ================== START ==================
 renderLevels();
+
 
