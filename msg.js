@@ -25,23 +25,17 @@ const loveBtn = document.getElementById("loveBtn");
 
 document.body.style.overflowY = "hidden";
 
-
-// ================== TYPEWRITER (SAFE) ==================
+// ================== TYPEWRITER ==================
 function typeQuestion(text, el, speed = 40) {
   el.innerHTML = "";
   let i = 0;
-
-  function typeNext() {
+  (function type() {
     if (i < text.length) {
-      el.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typeNext, speed);
+      el.innerHTML += text.charAt(i++);
+      setTimeout(type, speed);
     }
-  }
-
-  typeNext();
+  })();
 }
-
 
 // ================== RENDER LEVELS ==================
 function renderLevels() {
@@ -52,19 +46,23 @@ function renderLevels() {
     d.className = "level";
     if (i === level) d.classList.add("pulse");
 
-    d.style.top = `${i * 80}px`;
+    d.style.top = `${i * 100}px`;
     d.style.left = i % 2 === 0 ? "60px" : "160px";
-    d.innerText = i === level ? "💖" : i < level ? "❤️" : "🔒";
+    d.innerHTML = i === level ? "💖" : i < level ? "❤️" : "🔒";
+
+    const label = document.createElement("div");
+    label.className = "level-label";
+    label.innerText = `Level ${i + 1}`;
+    d.appendChild(label);
 
     if (i === level) {
-  d.style.cursor = "pointer";
-  d.addEventListener("click", openGame);
+      d.style.cursor = "pointer";
+      d.onclick = openGame;
     }
 
     levelsDiv.appendChild(d);
   });
 }
-
 
 // ================== OPEN GAME ==================
 function openGame() {
@@ -74,92 +72,25 @@ function openGame() {
 
   typeQuestion(questions[level].q, questionEl);
 
-  const options = ["madu", "renduparum", "loosu", "thariyala", "yes", "no"];
-
-  options
+  ["madu","renduparum","loosu","thariyala","yes","no"]
     .sort(() => Math.random() - 0.5)
     .forEach(opt => {
       const b = document.createElement("button");
       b.innerText = opt;
-      b.disabled = false;
       b.onclick = () => checkAnswer(opt);
       optionsEl.appendChild(b);
     });
 }
 
-
-// ================== KISS EFFECT ==================
-function showKiss() {
-  for (let i = 0; i < 15; i++) {
-    const k = document.createElement("div");
-    k.className = "kiss";
-    k.innerText = "😘";
-    k.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(k);
-    setTimeout(() => k.remove(), 1300);
-  }
-}
-
-
-// ================== HEART MOVE ==================
-function moveHeart(callback) {
-  const levelsElems = document.querySelectorAll(".level");
-  const from = levelsElems[level];
-  const to = levelsElems[level + 1];
-  if (!to) return;
-
-  const h = document.createElement("div");
-  h.className = "moving-heart";
-  h.innerText = "❤️";
-
-  const f = from.getBoundingClientRect();
-  const t = to.getBoundingClientRect();
-
-  const startX = f.left + f.width / 2;
-  const startY = f.top + f.height / 2;
-  const endX = t.left + t.width / 2;
-  const endY = t.top + t.height / 2;
-
-  h.style.left = startX + "px";
-  h.style.top = startY + "px";
-  document.body.appendChild(h);
-
-  let progress = 0;
-  const curveHeight = -120;
-
-  function animate() {
-    progress += 0.02;
-
-    const x = startX + (endX - startX) * progress;
-    const y = startY + (endY - startY) * progress +
-              curveHeight * Math.sin(Math.PI * progress);
-
-    h.style.transform = `translate(${x - startX}px, ${y - startY}px)`;
-
-    if (progress < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      glitterExplosion(endX, endY);
-      h.remove();
-      if (callback) callback();
-    }
-  }
-
-  requestAnimationFrame(animate);
-}
-
-
 // ================== CHECK ANSWER ==================
 function checkAnswer(ans) {
   if (ans === questions[level].a) {
-    showKiss();
 
-    // 🔥 LAST QUESTION
+    // LAST LEVEL
     if (level === questions.length - 1) {
       game.style.display = "none";
       document.getElementById("map").style.display = "none";
       finalPopup.style.display = "flex";
-      document.body.style.overflowY = "auto";
 
       loveBtn.disabled = false;
       loveBtn.classList.remove("locked");
@@ -168,7 +99,6 @@ function checkAnswer(ans) {
       return;
     }
 
-    // 🧡 NORMAL LEVEL
     game.style.display = "none";
     moveHeart(() => {
       level++;
@@ -178,41 +108,44 @@ function checkAnswer(ans) {
 
   } else {
     feedback.innerText = "Try again my love 💕";
-    document.querySelector(".card").classList.add("shake");
-    setTimeout(() => {
-      document.querySelector(".card").classList.remove("shake");
-    }, 300);
   }
 }
 
+// ================== HEART MOVE ==================
+function moveHeart(callback) {
+  const levels = document.querySelectorAll(".level");
+  const from = levels[level];
+  const to = levels[level + 1];
+  if (!to) return;
 
-// ================== GLITTER ==================
-function glitterExplosion(x, y) {
-  for (let i = 0; i < 20; i++) {
-    const g = document.createElement("div");
-    g.className = "glitter";
-    g.innerText = ["✨", "💖", "💫"][Math.floor(Math.random() * 3)];
+  const f = from.getBoundingClientRect();
+  const t = to.getBoundingClientRect();
 
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 40 + Math.random() * 40;
+  const heart = document.createElement("div");
+  heart.className = "moving-heart";
+  heart.innerText = "❤️";
+  heart.style.left = f.left + f.width / 2 + "px";
+  heart.style.top = f.top + f.height / 2 + "px";
+  document.body.appendChild(heart);
 
-    g.style.left = x + "px";
-    g.style.top = y + "px";
-    g.style.setProperty("--x", Math.cos(angle) * distance + "px");
-    g.style.setProperty("--y", Math.sin(angle) * distance + "px");
-
-    document.body.appendChild(g);
-    setTimeout(() => g.remove(), 1000);
+  let p = 0;
+  function animate() {
+    p += 0.02;
+    heart.style.transform =
+      `translate(${(t.left-f.left)*p}px, ${(t.top-f.top)*p - 120*Math.sin(Math.PI*p)}px)`;
+    if (p < 1) requestAnimationFrame(animate);
+    else {
+      heart.remove();
+      callback();
+    }
   }
+  animate();
 }
 
-
-// ================== NEXT PAGE ==================
+// ================== NEXT BUTTON (ONLY PLACE) ==================
 nextPageBtn.onclick = () => {
   window.location.href = "index2.html";
 };
 
-
 // ================== START ==================
 renderLevels();
-
