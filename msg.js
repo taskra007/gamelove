@@ -13,6 +13,7 @@ const questions = [
 
 let level = 0;
 
+/* Elements */
 const levelsDiv = document.getElementById("levels");
 const game = document.getElementById("game");
 const questionEl = document.getElementById("question");
@@ -20,22 +21,42 @@ const optionsEl = document.getElementById("options");
 const feedback = document.getElementById("feedback");
 const finalPopup = document.getElementById("finalPopup");
 const nextPageBtn = document.getElementById("nextPageBtn");
+const loveBtn = document.getElementById("loveBtn");
 
-/* Prevent scrolling initially */
 document.body.style.overflowY = "hidden";
 
-/* Render levels */
+
+// ================== TYPEWRITER (SAFE) ==================
+function typeQuestion(text, el, speed = 40) {
+  el.innerHTML = "";
+  let i = 0;
+
+  function typeNext() {
+    if (i < text.length) {
+      el.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typeNext, speed);
+    }
+  }
+
+  typeNext();
+}
+
+
+// ================== RENDER LEVELS ==================
 function renderLevels() {
   levelsDiv.innerHTML = "";
+
   questions.forEach((_, i) => {
     const d = document.createElement("div");
     d.className = "level";
+    if (i === level) d.classList.add("pulse");
+
     d.style.top = `${i * 80}px`;
     d.style.left = i % 2 === 0 ? "60px" : "160px";
     d.innerText = i === level ? "💖" : i < level ? "❤️" : "🔒";
 
     if (i === level) {
-      d.style.cursor = "pointer";
       d.onclick = openGame;
       d.addEventListener("touchstart", openGame);
     }
@@ -44,24 +65,30 @@ function renderLevels() {
   });
 }
 
-/* Open game */
+
+// ================== OPEN GAME ==================
 function openGame() {
   game.style.display = "flex";
-  questionEl.innerText = questions[level].q;
   feedback.innerText = "";
   optionsEl.innerHTML = "";
 
-  ["madu","renduparum","loosu","thariyala","yes","no"]
+  typeQuestion(questions[level].q, questionEl);
+
+  const options = ["madu", "renduparum", "loosu", "thariyala", "yes", "no"];
+
+  options
     .sort(() => Math.random() - 0.5)
     .forEach(opt => {
       const b = document.createElement("button");
       b.innerText = opt;
+      b.disabled = false;
       b.onclick = () => checkAnswer(opt);
       optionsEl.appendChild(b);
     });
 }
 
-/* Show kiss */
+
+// ================== KISS EFFECT ==================
 function showKiss() {
   for (let i = 0; i < 15; i++) {
     const k = document.createElement("div");
@@ -73,7 +100,8 @@ function showKiss() {
   }
 }
 
-/* Heart move */
+
+// ================== HEART MOVE ==================
 function moveHeart(callback) {
   const levelsElems = document.querySelectorAll(".level");
   const from = levelsElems[level];
@@ -87,45 +115,61 @@ function moveHeart(callback) {
   const f = from.getBoundingClientRect();
   const t = to.getBoundingClientRect();
 
-  h.style.left = f.left + "px";
-  h.style.top = f.top + "px";
+  const startX = f.left + f.width / 2;
+  const startY = f.top + f.height / 2;
+  const endX = t.left + t.width / 2;
+  const endY = t.top + t.height / 2;
+
+  h.style.left = startX + "px";
+  h.style.top = startY + "px";
   document.body.appendChild(h);
 
-  requestAnimationFrame(() => {
-    h.style.left = t.left + "px";
-    h.style.top = t.top + "px";
-  });
+  let progress = 0;
+  const curveHeight = -120;
 
-  setTimeout(() => {
-    h.remove();
-    if (callback) callback();
-  }, 1300);
+  function animate() {
+    progress += 0.02;
+
+    const x = startX + (endX - startX) * progress;
+    const y = startY + (endY - startY) * progress +
+              curveHeight * Math.sin(Math.PI * progress);
+
+    h.style.transform = `translate(${x - startX}px, ${y - startY}px)`;
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      glitterExplosion(endX, endY);
+      h.remove();
+      if (callback) callback();
+    }
+  }
+
+  requestAnimationFrame(animate);
 }
 
+
+// ================== CHECK ANSWER ==================
 function checkAnswer(ans) {
   if (ans === questions[level].a) {
     showKiss();
-    game.style.display = "none";
 
-    // 🔥 LAST LEVEL CASE
+    // 🔥 LAST QUESTION
     if (level === questions.length - 1) {
-      level++;
-      renderLevels();
-
+      game.style.display = "none";
       document.getElementById("map").style.display = "none";
       finalPopup.style.display = "flex";
       document.body.style.overflowY = "auto";
 
-      // 🔓 UNLOCK BUTTON
       loveBtn.disabled = false;
       loveBtn.classList.remove("locked");
       loveBtn.classList.add("unlocked");
       loveBtn.innerText = "❤️ Click for Love";
-
       return;
     }
 
-    // 🧡 NORMAL LEVELS
+    // 🧡 NORMAL LEVEL
+    game.style.display = "none";
     moveHeart(() => {
       level++;
       renderLevels();
@@ -141,11 +185,33 @@ function checkAnswer(ans) {
   }
 }
 
-/* Next page button */
+
+// ================== GLITTER ==================
+function glitterExplosion(x, y) {
+  for (let i = 0; i < 20; i++) {
+    const g = document.createElement("div");
+    g.className = "glitter";
+    g.innerText = ["✨", "💖", "💫"][Math.floor(Math.random() * 3)];
+
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 40 + Math.random() * 40;
+
+    g.style.left = x + "px";
+    g.style.top = y + "px";
+    g.style.setProperty("--x", Math.cos(angle) * distance + "px");
+    g.style.setProperty("--y", Math.sin(angle) * distance + "px");
+
+    document.body.appendChild(g);
+    setTimeout(() => g.remove(), 1000);
+  }
+}
+
+
+// ================== NEXT PAGE ==================
 nextPageBtn.onclick = () => {
   window.location.href = "index2.html";
 };
 
-/* Start */
+
+// ================== START ==================
 renderLevels();
-const loveBtn = document.getElementById("loveBtn");
