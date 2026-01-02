@@ -57,8 +57,8 @@ function renderLevels() {
     d.innerText = i === level ? "💖" : i < level ? "❤️" : "🔒";
 
     if (i === level) {
-      d.onclick = openGame;
-      d.addEventListener("touchstart", openGame);
+  d.style.cursor = "pointer";
+  d.addEventListener("click", openGame);
     }
 
     levelsDiv.appendChild(d);
@@ -215,3 +215,4 @@ nextPageBtn.onclick = () => {
 
 // ================== START ==================
 renderLevels();
+
