@@ -6,30 +6,49 @@
   font-family: Arial, sans-serif;
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
 body {
-  background: none;   /* remove pink */
+  background: transparent;
   color: white;
-  min-height: 100vh;
   overflow-x: hidden;
   overflow-y: hidden;
 }
 #map {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+
   background-image: url("bg.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 100vh;
-}
 
-/* Map and levels */
-#map {
   text-align: center;
   padding-top: 20px;
-  position: relative;
-  height: 100vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+
+  z-index: 1;
 }
+#map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 0;
+}
+
+#map > * {
+  position: relative;
+  z-index: 1;
+}
+
 
 #levels {
   position: relative;
@@ -304,4 +323,5 @@ body {
     transform: scaleX(1);
   }
 }
+
 
