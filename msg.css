@@ -7,11 +7,18 @@
 }
 
 body {
-  background: linear-gradient(#ff5fa2, #ff9fcf);
+  background: none;   /* remove pink */
   color: white;
   min-height: 100vh;
   overflow-x: hidden;
   overflow-y: hidden;
+}
+#map {
+  background-image: url("bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
 /* Map and levels */
@@ -297,3 +304,4 @@ body {
     transform: scaleX(1);
   }
 }
+
